@@ -36,7 +36,7 @@ module.exports = Stampit()
       request.defer.resolve(resp)
     }.bind(this)
 
-    this.readHoldingRegisters = function (start, quantity) {
+    this.readHoldingRegisters = function (start, quantity, unitId) {
       return new Promise(function (resolve, reject) {
         this.log.debug('Starting read holding registers request.')
 
@@ -47,6 +47,7 @@ module.exports = Stampit()
         pdu.writeUInt16BE(start, 1)
         pdu.writeUInt16BE(quantity, 3)
 
+        if (unitId) pdu = Buffer.concat([pdu, Buffer.from([unitId])]);
         this.queueRequest(fc, pdu, { resolve: resolve, reject: reject })
       }.bind(this))
     }

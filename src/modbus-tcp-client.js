@@ -149,6 +149,15 @@ module.exports = stampit()
       head.writeUInt16BE(pdu.length + 1, 4)
       head.writeUInt8(this.unitId, 6)
 
+      if (pdu.length == 6 && pdu[0] >= 1 && pdu[0] <= 4) {
+        head.writeUInt16BE(pdu.length, 4)
+        head.writeUInt8(pdu[5], 6)
+        pdu = pdu.slice(0,5)
+      } else {
+        head.writeUInt16BE(pdu.length + 1, 4)
+        head.writeUInt8(this.unitId, 6)
+      }
+
       var pkt = Buffer.concat([head, pdu])
 
       currentRequestId = reqId
